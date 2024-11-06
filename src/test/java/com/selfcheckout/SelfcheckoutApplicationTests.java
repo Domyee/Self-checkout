@@ -17,5 +17,4 @@ class SelfcheckoutApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
