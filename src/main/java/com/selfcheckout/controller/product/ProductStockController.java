@@ -1,7 +1,7 @@
-package com.selfcheckout.controller;
+package com.selfcheckout.controller.product;
 
-import com.selfcheckout.model.ProductStock;
-import com.selfcheckout.service.ProductStockService;
+import com.selfcheckout.model.product.ProductStock;
+import com.selfcheckout.service.product.ProductStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

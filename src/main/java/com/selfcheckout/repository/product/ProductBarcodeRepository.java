@@ -1,6 +1,6 @@
-package com.selfcheckout.repository;
+package com.selfcheckout.repository.product;
 
-import com.selfcheckout.model.ProductBarcode;
+import com.selfcheckout.model.product.ProductBarcode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

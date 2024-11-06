@@ -1,22 +1,15 @@
-package com.selfcheckout.model;
+package com.selfcheckout.model.product;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.selfcheckout.model.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "product_barcode")
-@Getter
-@Setter
-@NoArgsConstructor
-public class ProductBarcode {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductBarcode extends BaseEntity {
 
     @Column(name = "CODE")
     private String code;

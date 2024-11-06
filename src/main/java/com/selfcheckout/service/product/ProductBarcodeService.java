@@ -1,6 +1,6 @@
-package com.selfcheckout.service;
+package com.selfcheckout.service.product;
 
-import com.selfcheckout.model.ProductBarcode;
+import com.selfcheckout.model.product.ProductBarcode;
 
 public interface ProductBarcodeService {
 

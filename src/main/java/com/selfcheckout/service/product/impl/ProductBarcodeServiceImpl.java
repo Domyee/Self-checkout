@@ -1,8 +1,8 @@
-package com.selfcheckout.service.impl;
+package com.selfcheckout.service.product.impl;
 
-import com.selfcheckout.model.ProductBarcode;
-import com.selfcheckout.repository.ProductBarcodeRepository;
-import com.selfcheckout.service.ProductBarcodeService;
+import com.selfcheckout.model.product.ProductBarcode;
+import com.selfcheckout.repository.product.ProductBarcodeRepository;
+import com.selfcheckout.service.product.ProductBarcodeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

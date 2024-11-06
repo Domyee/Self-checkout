@@ -1,4 +1,4 @@
-package com.selfcheckout.model.enumeration;
+package com.selfcheckout.dto.enumeration;
 
 import lombok.Getter;
 
