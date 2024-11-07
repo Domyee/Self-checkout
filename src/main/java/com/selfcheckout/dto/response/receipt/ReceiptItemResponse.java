@@ -5,15 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateReceiptResponse {
+public class ReceiptItemResponse {
 
-    private LocalDateTime createTms;
-    private List<ReceiptItemResponse> items;
+    private String name;
+    private Long quantity;
+    private BigDecimal price;
 }

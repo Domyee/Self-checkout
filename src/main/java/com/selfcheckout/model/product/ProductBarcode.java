@@ -1,9 +1,7 @@
 package com.selfcheckout.model.product;
 
 import com.selfcheckout.model.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -11,15 +9,16 @@ import java.time.LocalDate;
 @Table(name = "product_barcode")
 public class ProductBarcode extends BaseEntity {
 
-    @Column(name = "CODE")
-    private String code;
+    @Column(name = "barcode")
+    private String barcode;
 
-    @Column(name = "START_DATE")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "END_DATE")
+    @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "PRODUCT_ID")
-    private Long productId;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
