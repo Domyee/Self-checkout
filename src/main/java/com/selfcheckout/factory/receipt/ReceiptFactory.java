@@ -41,6 +41,29 @@ public class ReceiptFactory {
         return receipt;
     }
 
+    // ReceiptTmp -> Receipt
+    public Receipt mapReceiptEntity(ReceiptTmp request){
+
+        Receipt receipt = new Receipt();
+        List<ReceiptItem> items = new ArrayList<>();
+
+        for(ReceiptTmpItem ri : request.getItems()){
+            ReceiptItem item = new ReceiptItem();
+
+            item.setName(ri.getName());
+            item.setPrice(ri.getPrice());
+            item.setQuantity(ri.getQuantity());
+            item.setReceipt(receipt);
+
+            items.add(item);
+        }
+
+        receipt.setItems(items);
+        receipt.setCreateTms(LocalDateTime.now());
+
+        return receipt;
+    }
+
 
     // Receipt -> CreateReceiptResponse
     public CreateReceiptResponse mapCreateReceiptResponse(Receipt receipt){

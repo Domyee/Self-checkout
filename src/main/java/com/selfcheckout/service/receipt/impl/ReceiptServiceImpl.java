@@ -44,21 +44,46 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
+    public CreateReceiptResponse createReceipt(Long receiptTmpId) {
+
+        ReceiptTmp receiptTmp = receiptTmpRepository.getReferenceById(receiptTmpId);
+
+        // save the actual receipt
+        Receipt result = receiptRepository.save(
+                receiptFactory.mapReceiptEntity(receiptTmp));
+
+        // Delete the temporary receipt and its items
+        receiptTmpRepository.deleteById(receiptTmpId);
+
+        return receiptFactory.mapCreateReceiptResponse(result);
+    }
+
+    @Override
     public UpdateReceiptResponse updateReceipt(UpdateReceiptReq request) {
 
         // Retrieve the product from barcode
-        Product product = productRepository.findByBarcode(request.getBarcode());
-        if(product == null)
-            throw new EntityNotFoundException(String.format("Product with barcode %s not found", request.getBarcode()));
+        Product product = Optional.of(
+                productRepository.findByBarcode(request.getBarcode()))
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with barcode %s not found", request.getBarcode())));
 
-        // Retrieve the temporary receipt or create a new one
-        Optional<ReceiptTmp> optionalReceiptTmp = receiptTmpRepository.findById(request.getReceiptTmpId());
-        ReceiptTmp receiptTmp = optionalReceiptTmp.orElseGet(ReceiptTmp::new);
+
+        ReceiptTmp receiptTmp = new ReceiptTmp();
+
+        // Check if a Temporary receipt with the request id is present
+        if(request.getReceiptTmpId() != null) {
+            Optional<ReceiptTmp> optionalReceiptTmp =
+                    Optional.of(
+                            receiptTmpRepository.findById(request.getReceiptTmpId())
+                            .orElseThrow(() -> new EntityNotFoundException("Temporary Receipt with id %d not found: " + request.getReceiptTmpId())));
+
+            receiptTmp = optionalReceiptTmp.get();
+        }
 
         List<ReceiptTmpItem> items = receiptTmp.getItems();
 
         boolean isNewItem = true;
 
+        // Check if the same item is present (by name)
         for(int i = 0; i < items.size(); i++){
             if(items.get(i).getName().equalsIgnoreCase(product.getName())){
                 ReceiptTmpItem item = items.get(i);
@@ -69,6 +94,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             }
         }
 
+        // Add item if it's new
         if(isNewItem)
             items.add(createNewReceiptTmpItem(product, receiptTmp));
 

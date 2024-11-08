@@ -27,6 +27,14 @@ public class ReceiptController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/{receiptTmpId}")
+    public ResponseEntity<CreateReceiptResponse> createReceipt(@PathVariable Long receiptTmpId){
+
+        CreateReceiptResponse response = receiptService.createReceipt(receiptTmpId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PutMapping("/")
     public ResponseEntity<UpdateReceiptResponse> updateReceipt(@RequestBody UpdateReceiptReq request){
         UpdateReceiptResponse response = receiptService.updateReceipt(request);

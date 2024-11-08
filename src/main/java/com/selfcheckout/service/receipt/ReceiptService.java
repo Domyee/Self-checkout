@@ -9,5 +9,7 @@ public interface ReceiptService {
 
     CreateReceiptResponse createReceipt(CreateReceiptReq receipt);
 
+    CreateReceiptResponse createReceipt(Long receiptTmpId);
+
     UpdateReceiptResponse updateReceipt(UpdateReceiptReq receipt);
 }
