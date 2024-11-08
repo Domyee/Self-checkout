@@ -1,5 +1,6 @@
 package com.selfcheckout.model.receipt;
 
+import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class ReceiptTmpItem extends BaseEntity {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @Column(name = "department")
+    @Enumerated(EnumType.STRING)
+    private Department department;
 
     @ManyToOne
     @JoinColumn(name = "receipt_tmp_id")

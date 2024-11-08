@@ -17,7 +17,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,13 +48,21 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
+    @Transactional
     public CreateReceiptResponse createReceipt(Long receiptTmpId) {
 
         ReceiptTmp receiptTmp = receiptTmpRepository.getReferenceById(receiptTmpId);
+        BigDecimal total = BigDecimal.valueOf(0);
+
+        for(ReceiptTmpItem ri : receiptTmp.getItems()){
+            total = total.add(ri.getPrice());
+        }
+
+        Receipt receipt = receiptFactory.mapReceiptEntity(receiptTmp);
+        receipt.setTotal(total);
 
         // save the actual receipt
-        Receipt result = receiptRepository.save(
-                receiptFactory.mapReceiptEntity(receiptTmp));
+        Receipt result = receiptRepository.save(receipt);
 
         // Delete the temporary receipt and its items
         receiptTmpRepository.deleteById(receiptTmpId);
@@ -59,6 +71,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     }
 
     @Override
+    @Transactional
     public UpdateReceiptResponse updateReceipt(UpdateReceiptReq request) {
 
         // Retrieve the product from barcode
@@ -104,12 +117,28 @@ public class ReceiptServiceImpl implements ReceiptService {
                 receiptTmpRepository.save(receiptTmp));
     }
 
+    @Override
+    public BigDecimal retrieveDayTurnover(LocalDate day) {
+
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
+
+        BigDecimal dayTurnover = dayReceipts.stream()
+                .map(Receipt::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return dayTurnover;
+    }
+
     private ReceiptTmpItem createNewReceiptTmpItem(Product product, ReceiptTmp receiptTmp){
         ReceiptTmpItem item = new ReceiptTmpItem();
 
         item.setName(product.getName());
         item.setQuantity(1L);
         item.setPrice(product.getPrice());
+        item.setDepartment(product.getDepartment());
         item.setReceiptTmp(receiptTmp);
 
         return item;

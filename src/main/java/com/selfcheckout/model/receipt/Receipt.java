@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public class Receipt extends BaseEntity {
     @Column(name = "create_tms")
     private LocalDateTime createTms;
 
+    @Column(name = "total")
+    private BigDecimal total;
 }

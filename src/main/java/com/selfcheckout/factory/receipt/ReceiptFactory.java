@@ -30,6 +30,7 @@ public class ReceiptFactory {
             item.setName(ri.getName());
             item.setPrice(ri.getPrice());
             item.setQuantity(ri.getQuantity());
+            item.setDepartment(ri.getDepartment());
             item.setReceipt(receipt);
 
             items.add(item);
@@ -53,6 +54,7 @@ public class ReceiptFactory {
             item.setName(ri.getName());
             item.setPrice(ri.getPrice());
             item.setQuantity(ri.getQuantity());
+            item.setDepartment(ri.getDepartment());
             item.setReceipt(receipt);
 
             items.add(item);
@@ -77,6 +79,7 @@ public class ReceiptFactory {
             item.setName(ri.getName());
             item.setQuantity(ri.getQuantity());
             item.setPrice(ri.getPrice());
+            item.setDepartment(ri.getDepartment());
 
             items.add(item);
         }
@@ -98,6 +101,7 @@ public class ReceiptFactory {
             item.setName(ri.getName());
             item.setQuantity(ri.getQuantity());
             item.setPrice(ri.getPrice());
+            item.setDepartment(ri.getDepartment());
 
             items.add(item);
         }

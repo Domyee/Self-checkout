@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/receipt")
 @Slf4j
@@ -21,7 +24,6 @@ public class ReceiptController {
 
     @PostMapping("/")
     public ResponseEntity<CreateReceiptResponse> createReceipt(@RequestBody CreateReceiptReq request){
-
         CreateReceiptResponse response = receiptService.createReceipt(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -29,7 +31,6 @@ public class ReceiptController {
 
     @PostMapping("/{receiptTmpId}")
     public ResponseEntity<CreateReceiptResponse> createReceipt(@PathVariable Long receiptTmpId){
-
         CreateReceiptResponse response = receiptService.createReceipt(receiptTmpId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -38,6 +39,13 @@ public class ReceiptController {
     @PutMapping("/")
     public ResponseEntity<UpdateReceiptResponse> updateReceipt(@RequestBody UpdateReceiptReq request){
         UpdateReceiptResponse response = receiptService.updateReceipt(request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{day}")
+    public ResponseEntity<BigDecimal> retrieveDayTurnover(@PathVariable LocalDate day){
+        BigDecimal response = receiptService.retrieveDayTurnover(day);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
