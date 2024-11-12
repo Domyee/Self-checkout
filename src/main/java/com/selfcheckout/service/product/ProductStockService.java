@@ -6,4 +6,6 @@ public interface ProductStockService {
 
     ProductStock retrieveProductStock(Long id);
 
+    void calculateStock();
+
 }

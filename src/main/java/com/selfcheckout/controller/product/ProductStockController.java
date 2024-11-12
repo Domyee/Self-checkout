@@ -25,4 +25,11 @@ public class ProductStockController {
 
         return new ResponseEntity<>(productStock, HttpStatus.OK);
     }
+
+    @GetMapping("/calculate")
+    public ResponseEntity<Void> calculateStock(){
+        productStockService.calculateStock();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

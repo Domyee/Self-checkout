@@ -56,6 +56,7 @@ public class ReceiptFactory {
             item.setQuantity(ri.getQuantity());
             item.setDepartment(ri.getDepartment());
             item.setReceipt(receipt);
+            item.setProduct(ri.getProduct());
 
             items.add(item);
         }

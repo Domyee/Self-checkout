@@ -11,6 +11,5 @@ import java.util.List;
 @Repository
 public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
-//    @Query("SELECT * FROM receipt r WHERE r.createTms BETWEEN :startOfDay AND :endOfDay")
     List<Receipt> findByCreateTmsBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 }

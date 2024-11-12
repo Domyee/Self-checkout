@@ -98,7 +98,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         // Check if the same item is present (by name)
         for(int i = 0; i < items.size(); i++){
-            if(items.get(i).getName().equalsIgnoreCase(product.getName())){
+            if(items.get(i).getProduct().equals(product)){
                 ReceiptTmpItem item = items.get(i);
                 item.setQuantity(item.getQuantity() + 1);
                 items.set(i, item);
@@ -140,6 +140,7 @@ public class ReceiptServiceImpl implements ReceiptService {
         item.setPrice(product.getPrice());
         item.setDepartment(product.getDepartment());
         item.setReceiptTmp(receiptTmp);
+        item.setProduct(product);
 
         return item;
     }

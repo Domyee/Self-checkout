@@ -2,6 +2,7 @@ package com.selfcheckout.model.receipt;
 
 import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.model.BaseEntity;
+import com.selfcheckout.model.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,8 @@ public class ReceiptTmpItem extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "receipt_tmp_id")
     private ReceiptTmp receiptTmp;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
