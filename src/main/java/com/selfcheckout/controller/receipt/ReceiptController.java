@@ -1,5 +1,6 @@
 package com.selfcheckout.controller.receipt;
 
+import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.dto.request.receipt.CreateReceiptReq;
 import com.selfcheckout.dto.request.receipt.UpdateReceiptReq;
 import com.selfcheckout.dto.response.receipt.CreateReceiptResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/receipt")
@@ -43,9 +45,16 @@ public class ReceiptController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{day}")
+    @GetMapping("/turnover/{day}")
     public ResponseEntity<BigDecimal> retrieveDayTurnover(@PathVariable LocalDate day){
         BigDecimal response = receiptService.retrieveDayTurnover(day);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/department/turnover/{day}")
+    public ResponseEntity<Map<Department, BigDecimal>> retrieveDepartmentDayTurnover(@PathVariable LocalDate day){
+        Map<Department, BigDecimal> response = receiptService.retrieveDepartmentDayTurnover(day);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
