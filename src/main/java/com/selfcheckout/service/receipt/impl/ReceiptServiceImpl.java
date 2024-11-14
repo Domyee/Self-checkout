@@ -1,5 +1,6 @@
 package com.selfcheckout.service.receipt.impl;
 
+import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.dto.request.receipt.CreateReceiptReq;
 import com.selfcheckout.dto.request.receipt.UpdateReceiptReq;
 import com.selfcheckout.dto.response.receipt.CreateReceiptResponse;
@@ -7,6 +8,7 @@ import com.selfcheckout.dto.response.receipt.UpdateReceiptResponse;
 import com.selfcheckout.factory.receipt.ReceiptFactory;
 import com.selfcheckout.model.product.Product;
 import com.selfcheckout.model.receipt.Receipt;
+import com.selfcheckout.model.receipt.ReceiptItem;
 import com.selfcheckout.model.receipt.ReceiptTmp;
 import com.selfcheckout.model.receipt.ReceiptTmpItem;
 import com.selfcheckout.repository.product.ProductRepository;
@@ -23,7 +25,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 @Service
 @Slf4j
@@ -130,6 +134,76 @@ public class ReceiptServiceImpl implements ReceiptService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return dayTurnover;
+    }
+
+    @Override
+    public Map<Department, BigDecimal> retrieveDepartmentDayTurnover(LocalDate day) {
+
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
+
+        Map<Department, BigDecimal> departmentTurnover = new TreeMap<>();
+        for (Department dept : Department.values()) {
+            departmentTurnover.put(dept, BigDecimal.ZERO);
+        }
+
+        for(Receipt r : dayReceipts){
+            for(ReceiptItem ri : r.getItems()){
+                BigDecimal price = ri.getPrice();
+                BigDecimal quantity = BigDecimal.valueOf(ri.getQuantity());
+                BigDecimal currentItemTotal = price.multiply(quantity);
+                Department department = ri.getDepartment();
+
+                BigDecimal oldTotal = departmentTurnover.getOrDefault(department, BigDecimal.ZERO);
+                departmentTurnover.put(department, oldTotal.add(currentItemTotal));
+            }
+        }
+
+//        departmentTurnover = dayReceipts.stream()
+//                .flatMap(receipt -> receipt.getItems().stream())
+//                .collect(Collectors.groupingBy(ReceiptItem::getDepartment,
+//                        Collectors.reducing(BigDecimal.ZERO,
+//                                item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())),
+//                                BigDecimal::add)));
+
+        return departmentTurnover;
+    }
+
+    @Override
+    public Map<Department, BigDecimal> retrieveDepartmentYearTurnover(int year) {
+
+        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+        LocalDateTime endOfDay = startOfYear.plusYears(1);
+
+        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfYear, endOfDay);
+
+        Map<Department, BigDecimal> departmentTurnover = new TreeMap<>();
+        for (Department dept : Department.values()) {
+            departmentTurnover.put(dept, BigDecimal.ZERO);
+        }
+
+        for(Receipt r : dayReceipts){
+            for(ReceiptItem ri : r.getItems()){
+                BigDecimal price = ri.getPrice();
+                BigDecimal quantity = BigDecimal.valueOf(ri.getQuantity());
+                BigDecimal currentItemTotal = price.multiply(quantity);
+                Department department = ri.getDepartment();
+
+                BigDecimal oldTotal = departmentTurnover.getOrDefault(department, BigDecimal.ZERO);
+                departmentTurnover.put(department, oldTotal.add(currentItemTotal));
+            }
+        }
+
+//        departmentTurnover = dayReceipts.stream()
+//                .flatMap(receipt -> receipt.getItems().stream())
+//                .collect(Collectors.groupingBy(ReceiptItem::getDepartment,
+//                        Collectors.reducing(BigDecimal.ZERO,
+//                                item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())),
+//                                BigDecimal::add)));
+
+        return departmentTurnover;
     }
 
     private ReceiptTmpItem createNewReceiptTmpItem(Product product, ReceiptTmp receiptTmp){
