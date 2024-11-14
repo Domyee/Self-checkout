@@ -122,10 +122,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public BigDecimal retrieveDayTurnover(LocalDate day) {
 
-        LocalDateTime startOfDay = day.atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1);
-
-        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
+        List<Receipt> dayReceipts = findReceiptByCreateTmsBetween(day);
 
         BigDecimal dayTurnover = dayReceipts.stream()
                 .map(Receipt::getTotal)
@@ -137,10 +134,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Map<Department, BigDecimal> retrieveDepartmentDayTurnover(LocalDate day) {
 
-        LocalDateTime startOfDay = day.atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1);
-
-        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
+        List<Receipt> dayReceipts = findReceiptByCreateTmsBetween(day);
 
         Map<Department, BigDecimal> departmentTurnover = new TreeMap<>();
         for (Department dept : Department.values()) {
@@ -206,12 +200,8 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public List<ItemSoldResponse> retrieveIteamDayTurnover(LocalDate day) {
-        List<ItemSoldResponse> response = new ArrayList<>();
+        List<Receipt> dayReceipts = findReceiptByCreateTmsBetween(day);
 
-        LocalDateTime startOfDay = day.atStartOfDay();
-        LocalDateTime endOfDay = startOfDay.plusDays(1);
-
-        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
         TreeMap<Long, ItemSoldResponse> itemSoldMap = new TreeMap<>();
 
         for(Receipt r : dayReceipts){
@@ -241,9 +231,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             }
         }
 
-        response = new ArrayList<>(itemSoldMap.values());
-
-        return response;
+        return new ArrayList<>(itemSoldMap.values());
     }
 
     private ReceiptTmpItem createNewReceiptTmpItem(Product product, ReceiptTmp receiptTmp){
@@ -257,5 +245,12 @@ public class ReceiptServiceImpl implements ReceiptService {
         item.setProduct(product);
 
         return item;
+    }
+
+    private List<Receipt> findReceiptByCreateTmsBetween(LocalDate day){
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        return receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
     }
 }
