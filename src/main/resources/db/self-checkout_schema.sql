@@ -97,7 +97,7 @@ CREATE TABLE `product_stock` (
 
 LOCK TABLES `product_stock` WRITE;
 /*!40000 ALTER TABLE `product_stock` DISABLE KEYS */;
-INSERT INTO `product_stock` VALUES (1,96,'2024-11-12',1),(2,99,'2024-11-12',2),(3,99,'2024-11-12',3),(4,79,'2024-11-12',4),(5,198,'2024-11-12',5),(6,300,'2024-11-05',6);
+INSERT INTO `product_stock` VALUES (1,95,'2024-11-14',1),(2,95,'2024-11-14',2),(3,96,'2024-11-14',3),(4,67,'2024-11-14',4),(5,191,'2024-11-14',5),(6,293,'2024-11-14',6);
 /*!40000 ALTER TABLE `product_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +113,7 @@ CREATE TABLE `receipt` (
   `create_tms` datetime NOT NULL,
   `total` decimal(22,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `receipt` (
 
 LOCK TABLES `receipt` WRITE;
 /*!40000 ALTER TABLE `receipt` DISABLE KEYS */;
-INSERT INTO `receipt` VALUES (1,'2024-11-12 19:48:06',8.20),(2,'2024-11-12 19:48:12',4.90);
+INSERT INTO `receipt` VALUES (1,'2024-11-12 19:48:06',8.20),(2,'2024-11-12 19:48:12',4.90),(3,'2024-11-14 10:43:16',14.60),(4,'2024-11-11 10:43:20',7.90),(5,'2024-11-11 10:43:30',6.40),(6,'2024-11-14 11:11:00',10.50);
 /*!40000 ALTER TABLE `receipt` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +142,7 @@ CREATE TABLE `receipt_item` (
   `receipt_id` int NOT NULL,
   `product_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `receipt_item` (
 
 LOCK TABLES `receipt_item` WRITE;
 /*!40000 ALTER TABLE `receipt_item` DISABLE KEYS */;
-INSERT INTO `receipt_item` VALUES (1,'Biscotti',2,3.40,'GROCERY',1,1),(2,'Pasta',1,2.80,'GROCERY',1,2),(3,'Pane',1,2.00,'BAKERY',1,3),(4,'Biscotti',2,3.40,'GROCERY',2,1),(5,'Latte',1,1.30,'DAIRY',2,4),(6,'Banane',2,0.20,'PRODUCE',2,5);
+INSERT INTO `receipt_item` VALUES (1,'Biscotti',2,3.40,'GROCERY',1,1),(2,'Pasta',1,2.80,'GROCERY',1,2),(3,'Pane',1,2.00,'BAKERY',1,3),(4,'Biscotti',2,3.40,'GROCERY',2,1),(5,'Latte',1,1.30,'DAIRY',2,4),(6,'Banane',2,0.20,'PRODUCE',2,5),(7,'Biscotti',1,3.40,'GROCERY',3,1),(8,'Pasta',2,2.80,'GROCERY',3,2),(9,'Pane',3,2.00,'BAKERY',3,3),(10,'Latte',3,1.30,'DAIRY',3,4),(11,'Banane',3,0.20,'PRODUCE',3,5),(12,'Pollo',5,4.90,'MEAT',3,6),(13,'Pollo',1,4.90,'MEAT',4,6),(14,'Banane',1,0.20,'PRODUCE',4,5),(15,'Pasta',2,2.80,'GROCERY',4,2),(16,'Latte',9,1.30,'DAIRY',5,4),(17,'Pollo',1,4.90,'MEAT',5,6),(18,'Banane',3,0.20,'PRODUCE',5,5),(19,'Banane',8,0.20,'PRODUCE',6,5),(20,'Pollo',5,4.90,'MEAT',6,6),(21,'Biscotti',9,3.40,'GROCERY',6,1),(22,'Pane',8,2.00,'BAKERY',6,3);
 /*!40000 ALTER TABLE `receipt_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +166,7 @@ CREATE TABLE `receipt_tmp` (
   `id` int NOT NULL AUTO_INCREMENT,
   `create_tms` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,7 +194,7 @@ CREATE TABLE `receipt_tmp_item` (
   `receipt_tmp_id` int NOT NULL,
   `product_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-12 15:37:18
+-- Dump completed on 2024-11-14 12:25:02
