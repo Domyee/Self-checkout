@@ -4,6 +4,7 @@ import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.dto.request.receipt.CreateReceiptReq;
 import com.selfcheckout.dto.request.receipt.UpdateReceiptReq;
 import com.selfcheckout.dto.response.receipt.CreateReceiptResponse;
+import com.selfcheckout.dto.response.receipt.ItemSoldResponse;
 import com.selfcheckout.dto.response.receipt.UpdateReceiptResponse;
 import com.selfcheckout.factory.receipt.ReceiptFactory;
 import com.selfcheckout.model.product.Product;
@@ -24,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -204,6 +202,48 @@ public class ReceiptServiceImpl implements ReceiptService {
 //                                BigDecimal::add)));
 
         return departmentTurnover;
+    }
+
+    @Override
+    public List<ItemSoldResponse> retrieveIteamDayTurnover(LocalDate day) {
+        List<ItemSoldResponse> response = new ArrayList<>();
+
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfDay, endOfDay);
+        TreeMap<Long, ItemSoldResponse> itemSoldMap = new TreeMap<>();
+
+        for(Receipt r : dayReceipts){
+            for(ReceiptItem ri : r.getItems()){
+                ItemSoldResponse itemSold;
+                Long productId = ri.getProductId();
+                Long currentItemQuantity = ri.getQuantity();
+                BigDecimal currentItemPrice =
+                        ri.getPrice().multiply(BigDecimal.valueOf(currentItemQuantity));
+
+
+                if(itemSoldMap.containsKey(productId)){
+                    itemSold = itemSoldMap.get(productId);
+
+                    itemSold.setQuantitySold(itemSold.getQuantitySold() + currentItemQuantity);
+                    itemSold.setTotalAmount(itemSold.getTotalAmount().add(currentItemPrice));
+                } else {
+                    itemSold = new ItemSoldResponse();
+
+                    itemSold.setProductId(productId);
+                    itemSold.setProductName(ri.getName());
+                    itemSold.setQuantitySold(currentItemQuantity);
+                    itemSold.setTotalAmount(currentItemPrice);
+                }
+
+                itemSoldMap.put(ri.getProductId(), itemSold);
+            }
+        }
+
+        response = new ArrayList<>(itemSoldMap.values());
+
+        return response;
     }
 
     private ReceiptTmpItem createNewReceiptTmpItem(Product product, ReceiptTmp receiptTmp){

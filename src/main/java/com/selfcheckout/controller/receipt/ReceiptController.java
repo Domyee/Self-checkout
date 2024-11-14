@@ -4,6 +4,7 @@ import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.dto.request.receipt.CreateReceiptReq;
 import com.selfcheckout.dto.request.receipt.UpdateReceiptReq;
 import com.selfcheckout.dto.response.receipt.CreateReceiptResponse;
+import com.selfcheckout.dto.response.receipt.ItemSoldResponse;
 import com.selfcheckout.dto.response.receipt.UpdateReceiptResponse;
 import com.selfcheckout.service.receipt.ReceiptService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,6 +64,13 @@ public class ReceiptController {
     @GetMapping("/department/turnover/year/{year}")
     public ResponseEntity<Map<Department, BigDecimal>> retrieveDepartmentYearTurnover(@PathVariable int year){
         Map<Department, BigDecimal> response = receiptService.retrieveDepartmentYearTurnover(year);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/item/turnover/{day}")
+    public ResponseEntity<List<ItemSoldResponse>> retrieveIteamDayTurnover(@PathVariable LocalDate day){
+        List<ItemSoldResponse> response = receiptService.retrieveIteamDayTurnover(day);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

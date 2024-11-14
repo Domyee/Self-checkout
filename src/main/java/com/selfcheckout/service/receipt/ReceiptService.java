@@ -4,10 +4,12 @@ import com.selfcheckout.dto.enumeration.Department;
 import com.selfcheckout.dto.request.receipt.CreateReceiptReq;
 import com.selfcheckout.dto.request.receipt.UpdateReceiptReq;
 import com.selfcheckout.dto.response.receipt.CreateReceiptResponse;
+import com.selfcheckout.dto.response.receipt.ItemSoldResponse;
 import com.selfcheckout.dto.response.receipt.UpdateReceiptResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface ReceiptService {
@@ -23,4 +25,6 @@ public interface ReceiptService {
     Map<Department, BigDecimal> retrieveDepartmentDayTurnover(LocalDate day);
 
     Map<Department, BigDecimal> retrieveDepartmentYearTurnover(int year);
+
+    List<ItemSoldResponse> retrieveIteamDayTurnover(LocalDate day);
 }
