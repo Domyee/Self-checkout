@@ -21,4 +21,6 @@ public interface ReceiptService {
     BigDecimal retrieveDayTurnover(LocalDate day);
 
     Map<Department, BigDecimal> retrieveDepartmentDayTurnover(LocalDate day);
+
+    Map<Department, BigDecimal> retrieveDepartmentYearTurnover(int year);
 }

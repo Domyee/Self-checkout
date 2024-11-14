@@ -58,4 +58,11 @@ public class ReceiptController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/department/turnover/year/{year}")
+    public ResponseEntity<Map<Department, BigDecimal>> retrieveDepartmentYearTurnover(@PathVariable int year){
+        Map<Department, BigDecimal> response = receiptService.retrieveDepartmentYearTurnover(year);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

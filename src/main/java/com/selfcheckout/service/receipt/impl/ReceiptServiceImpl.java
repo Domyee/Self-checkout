@@ -171,6 +171,41 @@ public class ReceiptServiceImpl implements ReceiptService {
         return departmentTurnover;
     }
 
+    @Override
+    public Map<Department, BigDecimal> retrieveDepartmentYearTurnover(int year) {
+
+        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+        LocalDateTime endOfDay = startOfYear.plusYears(1);
+
+        List<Receipt> dayReceipts = receiptRepository.findByCreateTmsBetween(startOfYear, endOfDay);
+
+        Map<Department, BigDecimal> departmentTurnover = new TreeMap<>();
+        for (Department dept : Department.values()) {
+            departmentTurnover.put(dept, BigDecimal.ZERO);
+        }
+
+        for(Receipt r : dayReceipts){
+            for(ReceiptItem ri : r.getItems()){
+                BigDecimal price = ri.getPrice();
+                BigDecimal quantity = BigDecimal.valueOf(ri.getQuantity());
+                BigDecimal currentItemTotal = price.multiply(quantity);
+                Department department = ri.getDepartment();
+
+                BigDecimal oldTotal = departmentTurnover.getOrDefault(department, BigDecimal.ZERO);
+                departmentTurnover.put(department, oldTotal.add(currentItemTotal));
+            }
+        }
+
+//        departmentTurnover = dayReceipts.stream()
+//                .flatMap(receipt -> receipt.getItems().stream())
+//                .collect(Collectors.groupingBy(ReceiptItem::getDepartment,
+//                        Collectors.reducing(BigDecimal.ZERO,
+//                                item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())),
+//                                BigDecimal::add)));
+
+        return departmentTurnover;
+    }
+
     private ReceiptTmpItem createNewReceiptTmpItem(Product product, ReceiptTmp receiptTmp){
         ReceiptTmpItem item = new ReceiptTmpItem();
 
